@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+
+{% block title %}{% endblock title %}
+
+{% block content %}
+<!-- <div class="ui middle alligned stackable grid container">
+    <div class="row"> -->
+        <!-- <div class="eight wide column">
+            <div class="ui header">
+                <h1>
+                    Imagine-a-Company
+                  </h1>
+                  <h2>Do whatever you want when you want to.</h2>
+                  <div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div>
+            </div>
+        </div> -->
+        <div class="ui black raised very padded text container segment mt">
+            <h2 class="ui header">Welcome to SocialNet!</h2>
+            <p>Login or sign up to follow your friends and see what they are up to!</p>
+            <a href="{% url 'account_login' %}" class="ui blue basic button">Login</a>
+            <a href="{% url 'account_signup' %}" class="ui black basic button">Register</a>
+                <!-- <a href="{% url 'account_login' %}" class="btn btn-outline-primary mr-2">Login</a> -->
+                <!-- <a href="{% url 'account_signup' %}" class="btn btn-outline-success">Register</a>  -->
+        </div>
+{% endblock content %}

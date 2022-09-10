@@ -1,0 +1,43 @@
+
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %} Chat {% endblock title %}
+
+{% block content %}
+<div class="ui centered raised green container segment" style="width: 500px; height: auto; padding: 30px; margin-top: 8%;">
+    <h2 class="ui center aligned icon header">
+        <i class="comments outline icon"></i>
+        Chat
+      </h2>
+    <div class="ui centered card">
+        <div class="content">
+                Which chat room would you like to enter?<br>
+                <div class="ui fluid input">
+                    <input id="room-name-input" type="text" size="25">
+                </div><br>
+                
+                <div class="ui fluid input">
+                    <input type="hidden" id=user size="20" value={{user}}><br>
+                    <input id="room-name-submit" type="button" value="Enter" style="text-align: center;">
+                </div>
+                
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelector('#room-name-input').focus();
+    document.querySelector('#room-name-input').onkeyup = function(e) {
+        if (e.keyCode === 13) { // enter, return
+            document.querySelector('#room-name-submit').click();
+        }
+    };
+
+    document.querySelector('#room-name-submit').onclick = function(e) {
+        var roomName = document.querySelector('#room-name-input').value;
+        var Uname = document.querySelector('#user').value;
+        window.location.replace('/chat/'+roomName+'/?username='+Uname);
+    }
+</script>
+{% endblock content %}

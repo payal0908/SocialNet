@@ -1,0 +1,21 @@
+body {
+    background: #f5ffff !important;
+}
+
+.nav {
+    background-color: rgb(255, 238, 248) !important;
+}
+
+.mt {
+    margin-top: 15% !important;
+    width: fit-content !important;
+    text-align: center !important;
+    /* padding-top: 30%; */
+}
+
+.dp {
+    width: 30px !important; 
+    border-radius: 20px !important; 
+    margin-right: 5px !important; 
+    margin-bottom: 5px !important;
+}

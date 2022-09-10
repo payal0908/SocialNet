@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %} Home Edit {% endblock title %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+<div class="ui container">
+    
+        <div class="ui centered card" style="width: 600px;">
+            <a href="{% url 'home' object.pk %}" class="ui basic black button">Back to Profile</a>
+            <div class="content">
+
+                <div class="header" style="margin-top: 5px; margin-bottom: 10px;">
+                    Update your SocialNet Profile:
+                </div>
+                <form enctype="multipart/form-data" method="POST" class="ui form">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <a class="ui basic black button" href="{% url 'account_change_password' %}">Change Password</a><br><br>
+                    <button class="ui fluid inverted green button">Update</button>
+                </form>
+                
+            </div>
+        </div>
+</div>
+
+{% endblock content %}

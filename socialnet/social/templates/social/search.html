@@ -1,0 +1,57 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %} Appusers {% endblock title %}
+
+{% block content %}
+    <div class="ui container segment">
+        <h1><i class="search icon"></i>Search Results </h1>
+        {% if is_empty %}
+            <p>No profiles with "{{query}}" available</p>
+        {% else %}
+
+            <p>Profiles matching "{{query}}": </p>
+        
+            {% for obj in appuser_list %}
+                <div class="ui card">
+                    <div class="content">
+                        <div class="header">
+                            <a href="{% url 'home' obj.pk %}">
+                                <img class="ui avatar image" src="{{obj.display_img.url}}" style="margin-bottom: 5px;">
+                                <!-- <img src="{{obj.display_img.url}}" style="width: 30px; border-radius: 20px; margin-right: 5px; margin-bottom: 5px;"> -->
+                                {{obj.user}}
+                            </a>
+                            </div>
+                            <div class="description" style="margin-top: 5px;">
+                                {% if obj.bio %}
+                                    <p>Bio: {{obj.bio}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="extra content">
+                            {% if obj.user not in friend_receiver and obj.user not in friend_sender %}
+                                <form class="ui form" action="{% url 'send-request' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="appuser_pk" value={{obj.pk}}>
+                                    <button type="submit" class="ui basic green button"><i class="plus circle icon"></i>Add Friend</button>
+                                </form>
+                            {% endif %}
+                            {% if obj.user in friend_receiver and request.user not in obj.friends.all %}
+                                    <button type="button" class="ui disabled button"><i class="check icon"></i>Request Sent</button>
+                            {% endif %}
+                            {% if request.user in obj.friends.all %}
+                                <form action="{% url 'remove-friend' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="appuser_pk" value={{obj.pk}}>
+                                    
+                                    <button type="submit" class="ui basic red button"><i class="minus circle icon"></i>Remove Friend</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        
+    </div>
+{% endblock content %}

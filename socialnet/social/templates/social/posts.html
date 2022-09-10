@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Posts {% endblock title %}
+
+{% block content %}
+
+
+<div class="ui container segment">
+    <div class="ui two column very relaxed grid">
+      <div class="column">
+        <h1>Status Updates:</h1>
+
+            {% for post in posts %}
+                <div class="ui centered card " style="width: 400px;">
+                    {% if post.image %}
+                    <div class="image">
+                        <img src="{{post.image.url}}">
+                    </div>
+                    {% endif %}
+                     <div class="content">
+                        <a class="header" href="{% url 'home' post.created_by.pk %}">
+                            <img class="ui avatar image" src="{{post.created_by.appuser.display_img.url}}" style="margin-bottom: 5px;">
+                            <!-- <img src="{{post.created_by.appuser.display_img.url}}" style="width: 30px; border-radius: 20px; margin-right: 5px; margin-bottom: 5px;"> -->
+                            {{post.created_by}}
+                        </a>
+                        <div class="meta">
+                            <span class="date">{{post.created}}</span>
+                        </div>
+                        <div class="description">
+                            {{post.content}}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+      </div>
+      <div class="column">
+            <div class="ui centered card" style="margin-top: 50px; width: 420px;">
+                <div class="content">
+                    <div class="header" style="margin-bottom: 5px;">Post your Status!</div>
+                    <form class="ui form" method="POST" enctype="multipart/form-data">
+                        <div class="ui success message">
+                            <div class="header">Posted!</div>
+                        </div>
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button class="fluid ui black button" style="margin-top: 5px;" type="submit">POST</button>
+                    </form>
+                </div>
+            </div>
+      </div>
+    </div>
+</div>
+  
+
+
+{% endblock content %}

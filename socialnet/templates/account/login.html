@@ -1,0 +1,60 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% load crispy_forms_tags %}
+<!-- <div class="ui black raised very padded text container segment mt">
+  <h2 class="ui header">Welcome to SocialNet!</h2>
+  <p>Login or sign up to follow your friends and see what they are up to!</p>
+  <a href="" class="ui blue basic button">Login</a>
+  <a href="" class="ui black basic button">Register</a>
+      <a href="{% url 'account_login' %}" class="btn btn-outline-primary mr-2">Login</a>
+      <a href="{% url 'account_signup' %}" class="btn btn-outline-success">Register</a> 
+</div> -->
+
+{% block content %}
+<div class="ui raised black container segment" style="width: 500px; height: auto; padding: 30px; margin-top: 10%;">
+    <h1>{% trans "Sign In" %}</h1>
+
+    {% get_providers as socialaccount_providers %}
+
+    {% if socialaccount_providers %}
+    <p>{% blocktrans with site.name as site_name %}Please sign in with one
+    of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+    for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+    <div class="socialaccount_ballot">
+
+      <ul class="socialaccount_providers">
+        {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+      </ul>
+
+      <div class="login-or">{% trans 'or' %}</div>
+
+    </div>
+
+    {% include "socialaccount/snippets/login_extra.html" %}
+
+    {% else %}
+    <p>{% blocktrans %}If you have not created an account yet, then please
+    <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+    {% endif %}
+    <div class="ui container">
+        <form class="ui form" id="login-form" method="POST" action="{% url 'account_login' %}">
+          {% csrf_token %}
+          {{ form|crispy }}
+          {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+          <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+          <button class="fluid ui black button" name="sign-in" style="margin-top: 5px;" type="submit">{% trans "Sign In" %}</button>
+        </form>
+      </div>
+</div>
+
+
+
+{% endblock %}

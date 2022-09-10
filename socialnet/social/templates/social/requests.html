@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %} Requests {% endblock title %}
+
+{% block content %}
+
+
+<div class="ui container pink segment">
+
+    <h1>Requests</h1>
+    {% if is_empty %}
+        <p>No requests at the moment...</p>
+    {% else %}
+        {% for obj in query %}
+            <div class="ui pink card" style="width: 400px;">
+                <div class="content">
+                    <div class="header">
+                    <a href="{% url 'home' obj.pk %}">
+                        <img class="ui avatar image" src="{{obj.display_img.url}}" style="margin-bottom: 5px;">
+                        <!-- <img src="{{obj.display_img.url}}" style="width: 30px; border-radius: 20px; margin-right: 5px; margin-bottom: 5px;"> -->
+                        {{obj.user}}
+                    </a>
+                    </div>
+                    <div class="description" style="margin-top: 5px;">
+                        {% if obj.bio %}
+                            <p>Bio: {{obj.bio}}</p>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+                <div class="extra content">
+                    <form action="{% url 'accept-request' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="appuser_pk" value={{obj.pk}}>
+                        <button type="submit" class="ui left floated green button" style="width: 100px;">Accept</button>
+                    </form>
+                    <form action="{% url 'reject-request' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="appuser_pk" value={{obj.pk}}>
+                        <button type="submit" class="ui right floated red button" style="width: 100px;">Decline</button>
+                    </form>
+                    <div class="center aligned content">
+                        <a href="{% url 'home' obj.pk %}" class="ui basic blue button" style="margin-bottom: 5px;">View Profile</a>
+                    </div>  
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+  
+
+
+{% endblock content %}

@@ -1,0 +1,100 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %} Home {% endblock title %}
+
+{% block content %}
+
+<div class="ui container">
+    
+        <div class="ui centered pink card" style="width: 600px;">
+            <div class="content">
+                {% if request.user == appuser.user %}
+                    <a href="{% url 'home-edit' user.pk %}" class="ui basic blue button">
+                        <i class="address book outline icon"></i>
+                        Edit
+                    </a>
+                    <div class="ui right floated dropdown item">
+                        <i class="file code icon"></i>API Data<i class="dropdown icon"></i>
+                        <div class="menu">
+                            <a class="item" href="{% url 'schema-swagger-ui' %}">Swagger API</a>
+                            <a class="item" href="{% url 'api-appuser-detail' user.pk %}">User Detail</a>
+                            <a class="item" href="{% url 'api-post-detail' user.pk %}">Status Posts</a>
+                            <a class="item" href="{% url 'api-friends-detail' user.pk%}">Friends Detail</a>
+                            <a class="item" href="{% url 'api-request-sent' user.pk%}">Requests Sent</a>
+                            <a class="item" href="{% url 'api-request-received' user.pk%}">Requests Received</a>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="center aligned row">
+                    <div class="ui large image">
+                        <img src="{{appuser.display_img.url}}" style="width: 200px; border-radius: 10px;">
+                    </div>
+                </div>
+                
+                
+                <div class="center aligned header" style="margin-top: 5px;">
+                    <p>Username: {{appuser.user}}</p>
+                </div>
+                {% if appuser.name %}
+                <div class="center aligned description">
+                    <p>Name: {{appuser.name}}</p>
+                </div>
+                {% endif %}
+                {% if appuser.email %}
+                <div class="center aligned description">
+                    <p>Email: {{appuser.email}}</p>
+                </div>
+                {% endif %}
+                {% if appuser.bio %}
+                <div class="center aligned description">
+                    <p>Bio: {{appuser.bio}}</p>
+                </div>
+                {% endif %}
+                {% if appuser.friends %}
+                <div class="center aligned description">
+                    <div class="ui dropdown item">
+                        <i class="circular users icon"></i>
+                        Friends ({{appuser.get_friends.count}}) <i class="dropdown icon"></i>
+                        <div class="menu">
+                            {% for friend in appuser.get_friends %}
+                                <a href="{% url 'home' friend.appuser.pk %}" class="item">
+                                    <img class="ui avatar image" src="{{friend.appuser.display_img.url}}">
+                                    <!-- <img src="{{friend.appuser.display_img.url}}" style="border-radius: 20px;"> -->
+                                    {{friend}}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    
+    {% if request.user == appuser.user or request.user in appuser.get_friends%}
+        <div class="ui horizontal divider" >
+            {{appuser.user}}'s Status Updates:
+        </div>
+        {% for post in posts %}
+        <div class="ui centered card " style="width: 400px;">
+            {% if post.image %}
+            <div class="image">
+                <img src="{{post.image.url}}">
+            </div>
+            {% endif %}
+            <div class="content">
+                <a class="header">{{post.created_by}}</a>
+                <div class="meta">
+                    <span class="date">{{post.created}}</span>
+                </div>
+                <div class="description">
+                    {{post.content}}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock content %}
